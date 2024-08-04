@@ -47,12 +47,6 @@ namespace Safespot.Data.DataAccess
                 .HasForeignKey(p => p.ParkingZoneId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<SlotCounter>()
-                .HasOne(p => p.ParkingZone)
-                .WithMany()
-                .HasForeignKey(p => p.ParkingZoneId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             builder.Entity<UserSlot>()
                 .HasOne(p => p.User)
                 .WithMany()
@@ -70,6 +64,10 @@ namespace Safespot.Data.DataAccess
                 .WithMany()
                 .HasForeignKey(p => p.ParkingZoneId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Slot>()
+                .Property(p => p.Price)
+                .HasPrecision(18, 2);
         }
         #endregion
     }

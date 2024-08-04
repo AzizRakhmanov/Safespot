@@ -8,7 +8,7 @@ namespace Safespot.Models.Entities
 
         public decimal Price { get; set; }
 
-        public bool IsAvailableForBooking { get; set; }
+        public bool IsAvailableForBooking { get; set; } = true;
 
         public SlotCategory Category { get; set; }
 

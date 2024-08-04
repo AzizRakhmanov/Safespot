@@ -1,20 +1,35 @@
 using Microsoft.AspNetCore.Mvc;
+using Safespot.Data.IRepositories;
 using Safespot.Models;
+using Safespot.Models.Entities;
 using System.Diagnostics;
 
 namespace Safespot.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IRepository<User> repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IRepository<User> repository)
         {
-            _logger = logger;
+            this.repository = repository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(User user)
         {
+            if (ModelState.IsValid)
+            {
+                await this.repository.InsertAsync(user);
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> SubmitForm(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                await this.repository.InsertAsync(user);
+            }
             return View();
         }
 

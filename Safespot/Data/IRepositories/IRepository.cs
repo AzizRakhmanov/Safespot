@@ -7,14 +7,14 @@ namespace Safespot.Data.IRepositories
     {
         public ValueTask<TEntity> InsertAsync(TEntity entity);
 
-        public ValueTask<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression);
+        public ValueTask<bool> DeleteAsync(TEntity entity);
 
-        public ValueTask<bool> DeleteManyAsync(Expression<Func<TEntity,bool>> expression);
+        public ValueTask<bool> DeleteManyAsync(Expression<Func<TEntity, bool>> expression);
 
-        public TEntity UpdateAsync(TEntity entity);
+        public TEntity Update(TEntity entity);
 
         public ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression);
 
-        public Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity,bool>> expression);
+        public Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression);
     }
 }

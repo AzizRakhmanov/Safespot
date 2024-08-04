@@ -63,8 +63,17 @@ namespace Safespot.Migrations
                     b.Property<Guid>("AddressId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("BusinessSlot")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("EconomSlot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FreeSlot")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -140,6 +149,7 @@ namespace Safespot.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
@@ -150,37 +160,6 @@ namespace Safespot.Migrations
                     b.HasIndex("ParkingZoneId");
 
                     b.ToTable("Slots");
-                });
-
-            modelBuilder.Entity("Safespot.Models.Entities.SlotCounter", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BusinessSlots")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("EconomSlots")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FreeSlots")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ParkingZoneId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParkingZoneId");
-
-                    b.ToTable("SlotCounter");
                 });
 
             modelBuilder.Entity("Safespot.Models.Entities.User", b =>
@@ -295,17 +274,6 @@ namespace Safespot.Migrations
                 });
 
             modelBuilder.Entity("Safespot.Models.Entities.Slot", b =>
-                {
-                    b.HasOne("Safespot.Models.Entities.ParkingZone", "ParkingZone")
-                        .WithMany()
-                        .HasForeignKey("ParkingZoneId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("ParkingZone");
-                });
-
-            modelBuilder.Entity("Safespot.Models.Entities.SlotCounter", b =>
                 {
                     b.HasOne("Safespot.Models.Entities.ParkingZone", "ParkingZone")
                         .WithMany()

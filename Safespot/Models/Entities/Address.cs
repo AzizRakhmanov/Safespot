@@ -12,6 +12,6 @@ namespace Safespot.Models.Entities
 
         public string District { get; set; }
 
-        public string GoogleMapUrl {  get; set; }
+        public string GoogleMapUrl { get; set; }
     }
 }
