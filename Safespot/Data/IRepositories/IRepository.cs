@@ -16,5 +16,6 @@ namespace Safespot.Data.IRepositories
         public ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression);
 
         public Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression);
+        public Task<TEntity> SelectEagerAsync(Expression<Func<TEntity, bool>> expression, string[] includeProperties = null);
     }
 }

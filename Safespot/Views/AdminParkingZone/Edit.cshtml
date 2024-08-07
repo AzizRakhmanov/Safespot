@@ -1,0 +1,43 @@
+﻿@model Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForCreationDto
+
+<h4>ParkingZoneForCreationDto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FreeSlot" class="control-label"></label>
+                <input asp-for="FreeSlot" class="form-control" />
+                <span asp-validation-for="FreeSlot" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EconomSlot" class="control-label"></label>
+                <input asp-for="EconomSlot" class="form-control" />
+                <span asp-validation-for="EconomSlot" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BusinessSlot" class="control-label"></label>
+                <input asp-for="BusinessSlot" class="form-control" />
+                <span asp-validation-for="BusinessSlot" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="AllParkingZones">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Safespot.Models.Entities;
 using Safespot.Service.DTO.ParkingZoneDto;
+using Safespot.Service.DTO.ReservationDto;
 using Safespot.Service.DTO.SlotDto;
 using Safespot.Service.DTO.UserDto;
 
@@ -21,6 +22,9 @@ namespace Safespot.Service.Mapper
 
             CreateMap<Slot, SlotForCreationDto>().ReverseMap();
             CreateMap<Slot, SlotForResultDto>().ReverseMap();
+
+            CreateMap<Reservation, ReservationForCreationDto>().ReverseMap();
+            CreateMap<Reservation, ReservationForResultDto>().ReverseMap();
         }
     }
 }

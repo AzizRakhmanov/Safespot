@@ -11,7 +11,7 @@ namespace Safespot.Service.Services.AdminService.Services
     public class AdminReservationService : IAdminReservationService
     {
 
-        private readonly IRepository<Reservation> _repository;
+        private readonly IRepository<Reservation> _reservationRepository;
         private readonly IMapper _mapper;
         private readonly IRepository<Slot> _slotRepository;
 
@@ -20,7 +20,7 @@ namespace Safespot.Service.Services.AdminService.Services
             IMapper mapper,
             IRepository<Slot> slotRepository)
         {
-            this._repository = repository;
+            this._reservationRepository = repository;
             this._mapper = mapper;
             this._slotRepository = slotRepository;
         }
@@ -38,37 +38,71 @@ namespace Safespot.Service.Services.AdminService.Services
             }
 
             var dbReservation = this._mapper.Map<Reservation>(dto);
-            await this._repository.InsertAsync(dbReservation);
+            await this._reservationRepository.InsertAsync(dbReservation);
             slot.IsAvailableForBooking = false;
             this._slotRepository.Update(slot);
 
             return this._mapper.Map<ReservationForResultDto>(dto);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async ValueTask<bool> DeleteAsync(Guid id)
         {
-            var isAvilabel = await this._slotRepository.SelectAsync(p => p.IsAvailableForBooking);
+            var dbSlot = await this._slotRepository.SelectAsync(p => p.Id == id);
+            if (!dbSlot.IsAvailableForBooking)
+            {
+                dbSlot.IsAvailableForBooking = true;
+                this._slotRepository.Update(dbSlot);
+                return true;
+            }
+
             return true;
         }
 
-        public Task<IList<ReservationForResultDto>> RetrieveAllBySlotAsync(Guid slodId, PaginationParams @params)
+        public async Task<IList<ReservationForResultDto>> RetrieveAllBySlotAsync(Guid slodId, PaginationParams @params)
         {
-            throw new NotImplementedException();
+            var all = (await this._reservationRepository.SelectAllAsync(p => p.SlotId == slodId))
+                .ToPagedList(@params);
+
+            var mappedReservation = this._mapper.Map<IList<ReservationForResultDto>>(all);
+
+            return mappedReservation;
         }
 
-        public Task<IList<ReservationForResultDto>> RetrieveAllByTimeAsync(DateTime dateTime, PaginationParams @params)
+        public async Task<IList<ReservationForResultDto>> RetrieveAllByTimeAsync(DateTime startDate, DateTime EndDate, PaginationParams @params)
         {
-            throw new NotImplementedException();
+            var all = (await this._reservationRepository
+                .SelectAllAsync(p => p.CreatedAt > startDate && p.EndDate < EndDate))
+                .ToPagedList(@params);
+
+            var mappedReservations = this._mapper.Map<IList<ReservationForResultDto>>(all);
+
+            return mappedReservations;
         }
 
-        public ValueTask<ReservationForResultDto> RetrieveAsync(Guid id)
+        public async ValueTask<ReservationForResultDto> RetrieveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var dbReservation = await this._reservationRepository.SelectAsync(p => p.Id == id);
+
+            var mappedReservation = this._mapper.Map<ReservationForResultDto>(dbReservation);
+
+            return mappedReservation;
         }
 
-        public ValueTask<ReservationForResultDto> Update(Guid id, ReservationForCreationDto reservation)
+        public async ValueTask<ReservationForResultDto> Update(Guid id, ReservationForCreationDto reservation)
         {
-            throw new NotImplementedException();
+            var dbReservation = await this._reservationRepository.SelectAsync(p => p.Id == id);
+
+            dbReservation = this._mapper.Map<Reservation>(reservation);
+
+            var result = this._reservationRepository.Update(dbReservation);
+
+            return this._mapper.Map<ReservationForResultDto>(result);
         }
     }
 }

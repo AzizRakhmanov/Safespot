@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using Safespot.Data.DataAccess;
 using Safespot.Data.IRepositories;
 using Safespot.Models.Commons;
+using System;
 using System.Linq.Expressions;
 
 namespace Safespot.Data.Repositories
@@ -17,7 +19,8 @@ namespace Safespot.Data.Repositories
         }
         public async ValueTask<bool> DeleteAsync(TEntity entity)
         {
-            this._dbset.Entry(entity).State = EntityState.Deleted;
+            //this._dbset.Entry(entity).State = EntityState.Deleted;
+            this._context.Remove(entity);
             await this._context.SaveChangesAsync();
 
             return true;
@@ -47,12 +50,30 @@ namespace Safespot.Data.Repositories
             return await result.ToListAsync();
         }
 
+        /// <summary>
+        /// selects the first or default from database and returns it
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
         public async ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression)
         {
-            var result = await this._dbset.FindAsync(expression);
+            var result = await this._dbset.FirstOrDefaultAsync(expression);
 
             return result;
         }
+
+        public async Task<TEntity> SelectEagerAsync(Expression<Func<TEntity, bool>> expression, string[] includeProperties = null)
+        {
+            IQueryable<TEntity> query = this._dbset;
+
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.FirstOrDefaultAsync(expression);
+        }
+
         public TEntity Update(TEntity entity)
         {
             this._dbset.Entry(entity).State = EntityState.Modified;

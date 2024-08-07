@@ -25,3 +25,7 @@ body {
     display: flex;
     align-content:center;
 }
+.navbar-nav{
+    display: flex;
+    justify-content: space-around;
+}

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Safespot.Data.IRepositories;
 using Safespot.Models.Entities;
 using Safespot.Service.DTO.UserDto;
 
 namespace Safespot.Controllers
 {
-    [Authorize]
     public class UserRegistrationController : Controller
     {
         private readonly IRepository<User> _repository;

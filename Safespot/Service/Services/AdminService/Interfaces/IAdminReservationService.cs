@@ -5,7 +5,7 @@ namespace Safespot.Service.Services.AdminService.Interfaces
 {
     public interface IAdminReservationService
     {
-        public Task<IList<ReservationForResultDto>> RetrieveAllByTimeAsync(DateTime dateTime, PaginationParams @params);
+        public Task<IList<ReservationForResultDto>> RetrieveAllByTimeAsync(DateTime startDate, DateTime EndDate, PaginationParams @params);
 
         public Task<IList<ReservationForResultDto>> RetrieveAllBySlotAsync(Guid slodId, PaginationParams @params);
 

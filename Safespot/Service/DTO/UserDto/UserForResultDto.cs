@@ -2,5 +2,6 @@
 {
     public class UserForResultDto
     {
+        public Guid Id { get; set; }
     }
 }

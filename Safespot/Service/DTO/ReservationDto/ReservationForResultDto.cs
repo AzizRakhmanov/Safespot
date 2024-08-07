@@ -4,6 +4,7 @@ namespace Safespot.Service.DTO.ReservationDto
 {
     public class ReservationForResultDto
     {
+        public Guid Id { get; set; }
         public DateTimeOffset EndDate { get; set; }
 
         public PaymentType PaymentType { get; set; }
@@ -20,6 +21,6 @@ namespace Safespot.Service.DTO.ReservationDto
 
         public Guid ParkingZoneId { get; set; }
 
-        public ParkingZone ParkingZone { get; set; }
+        public Safespot.Models.Entities.ParkingZone ParkingZone { get; set; }
     }
 }

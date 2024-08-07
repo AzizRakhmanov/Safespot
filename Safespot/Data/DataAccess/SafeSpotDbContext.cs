@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Safespot.Models.Entities;
+using Safespot.Service.DTO.ParkingZoneDto;
+using Safespot.Service.DTO.ParkingZone;
 
 namespace Safespot.Data.DataAccess
 {
@@ -18,6 +20,10 @@ namespace Safespot.Data.DataAccess
         public DbSet<Reservation> Reservations { get; set; }
 
         public DbSet<Slot> Slots { get; set; }
+
+        public DbSet<Admin> Admins { get; set; }
+
+        public DbSet<CarPlateNumber> CarPlateNumbers { get; set; }
 
         #region
 
@@ -68,7 +74,14 @@ namespace Safespot.Data.DataAccess
             builder.Entity<Slot>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
+
+            builder.Entity<Reservation>()
+                .Property(p => p.PaidAmount)
+                .HasPrecision(18, 2);
         }
+        public DbSet<Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForCreationDto> ParkingZoneForCreationDto { get; set; }
+        public DbSet<Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForResultDto> ParkingZoneForResultDto { get; set; }
+        public DbSet<Safespot.Service.DTO.ParkingZone.ParkingZoneForDetailsDto> ParkingZoneForDetailsDto { get; set; }
         #endregion
     }
 }

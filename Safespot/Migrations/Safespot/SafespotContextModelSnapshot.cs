@@ -159,16 +159,13 @@ namespace Safespot.Migrations.Safespot
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Safespot.Areas.Identity.Models.UserForLoginDto", b =>
+            modelBuilder.Entity("Safespot.Service.DTO.UserDto.UserForLoginDto", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -181,20 +178,11 @@ namespace Safespot.Migrations.Safespot
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -216,8 +204,8 @@ namespace Safespot.Migrations.Safespot
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -253,7 +241,7 @@ namespace Safespot.Migrations.Safespot
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Safespot.Areas.Identity.Models.UserForLoginDto", null)
+                    b.HasOne("Safespot.Service.DTO.UserDto.UserForLoginDto", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -262,7 +250,7 @@ namespace Safespot.Migrations.Safespot
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Safespot.Areas.Identity.Models.UserForLoginDto", null)
+                    b.HasOne("Safespot.Service.DTO.UserDto.UserForLoginDto", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -277,7 +265,7 @@ namespace Safespot.Migrations.Safespot
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Safespot.Areas.Identity.Models.UserForLoginDto", null)
+                    b.HasOne("Safespot.Service.DTO.UserDto.UserForLoginDto", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,7 +274,7 @@ namespace Safespot.Migrations.Safespot
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Safespot.Areas.Identity.Models.UserForLoginDto", null)
+                    b.HasOne("Safespot.Service.DTO.UserDto.UserForLoginDto", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

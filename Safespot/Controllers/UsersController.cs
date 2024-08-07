@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Safespot.Data.IRepositories;
 using Safespot.Models.Entities;
-using Safespot.Service.Authentication;
+using Safespot.Service.DTO.UserDto;
 
 namespace Safespot.Controllers
 {
@@ -10,46 +10,17 @@ namespace Safespot.Controllers
     //[ApiController]
     public class UsersController : Controller
     {
-        private readonly IJwtManagerRepository _jwtManagerRepository;
         private readonly IRepository<User> _repository;
-        public UsersController(
-            IJwtManagerRepository jwtManagerRepository,
-            IRepository<User> repository)
+
+        public UsersController(IRepository<User> repository)
         {
-            this._jwtManagerRepository = jwtManagerRepository;
+            this._repository = repository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AllUsers()
+        public IActionResult Login(UserForLoginDto dto)
         {
-            var all = new List<User>()
-            {
-                new User()   {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Aziz",
-                    LastName = "Rakhmanov",
-                    BirthDate = DateTime.Now,
-                    CreatedAt = DateTime.Now,
-                    Role = UserRole.Admin
-                }};
 
-
-            return View(all);
-        }
-
-        [HttpPost]
-        public IActionResult Authenticate(Users usersdata)
-        {
-            //var user = await this._repository.SelectAsync(p => p.Password == usersdata.Password);
-            //if()
-            //var token = this._jwtManagerRepository.Authenticate(usersdata);
-
-            ////if (token == null) {
-            ////    return Unauthorized();
-            //}
             return View();
-
         }
-
     }
 }

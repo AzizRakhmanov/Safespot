@@ -1,26 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace Safespot.Service.DTO.ParkingZoneDto
 {
     public class ParkingZoneForCreationDto
     {
-        [Required(ErrorMessage = "Name is required")]
-        public string FirstName { get; set; }
+        public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Surname is required")]
-        public string LastName { get; set; }
+        public string Name { get; set; }
 
-        public string MiddleName { get; set; }
+        public int FreeSlot { get; set; }
 
-        [Phone]
-        [Required(ErrorMessage = "Phone number is required")]
-        public string PhoneNumber { get; set; }
+        public int EconomSlot { get; set; }
 
-        [EmailAddress]
-        [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Email is confirmed with password")]
-        public string Password { get; set; }
+        public int BusinessSlot { get; set; }
     }
 }

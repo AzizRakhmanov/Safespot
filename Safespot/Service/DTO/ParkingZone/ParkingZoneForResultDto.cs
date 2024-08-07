@@ -1,26 +1,21 @@
 ﻿using System.ComponentModel;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace Safespot.Service.DTO.ParkingZoneDto
 {
     public class ParkingZoneForResultDto
     {
-        [DisplayName("Name")]
-        public string FirstName { get; set; }
+        public Guid Id { get; set; }
 
-        [DisplayName("Surname")]
-        public string LastName { get; set; }
+        public string Name { get; set; }
 
-        [DisplayName("Middle Name")]
-        public string MiddleName { get; set; }
+        [DisplayName("Free Slot")]
+        public int FreeSlot { get; set; }
 
+        [DisplayName("Econom slot")]
+        public int EconomSlot { get; set; }
 
-        [DisplayName("Phone number")]
-        public string PhoneNumber { get; set; }
-
-        [DisplayName("Email")]
-        public string Email { get; set; }
-
-        [DisplayName("Password")]
-        public string Password { get; set; }
+        [DisplayName("Business Slot")]
+        public int BusinessSlot { get; set; }
     }
 }

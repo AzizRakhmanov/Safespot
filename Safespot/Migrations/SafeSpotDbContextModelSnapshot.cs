@@ -54,6 +54,76 @@ namespace Safespot.Migrations
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Safespot.Models.Entities.Admin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("Safespot.Models.Entities.CarPlateNumber", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookedFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("BookedTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CarPlateNumbers");
+                });
+
             modelBuilder.Entity("Safespot.Models.Entities.ParkingZone", b =>
                 {
                     b.Property<Guid>("Id")
@@ -94,6 +164,9 @@ namespace Safespot.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CarPlateNumberId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -101,6 +174,7 @@ namespace Safespot.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("PaidAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ParkingZoneId")
@@ -112,6 +186,9 @@ namespace Safespot.Migrations
                     b.Property<Guid>("SlotId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -119,6 +196,8 @@ namespace Safespot.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarPlateNumberId");
 
                     b.HasIndex("ParkingZoneId");
 
@@ -192,9 +271,6 @@ namespace Safespot.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -235,6 +311,52 @@ namespace Safespot.Migrations
                     b.ToTable("UserSlot");
                 });
 
+            modelBuilder.Entity("Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForCreationDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BusinessSlot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EconomSlot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FreeSlot")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParkingZoneForCreationDto");
+                });
+
+            modelBuilder.Entity("Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForResultDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BusinessSlot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EconomSlot")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FreeSlot")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ParkingZoneForResultDto");
+                });
+
             modelBuilder.Entity("Safespot.Models.Entities.ParkingZone", b =>
                 {
                     b.HasOne("Safespot.Models.Entities.Address", "Address")
@@ -248,6 +370,12 @@ namespace Safespot.Migrations
 
             modelBuilder.Entity("Safespot.Models.Entities.Reservation", b =>
                 {
+                    b.HasOne("Safespot.Models.Entities.CarPlateNumber", "CarPlateNumber")
+                        .WithMany()
+                        .HasForeignKey("CarPlateNumberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Safespot.Models.Entities.ParkingZone", "ParkingZone")
                         .WithMany()
                         .HasForeignKey("ParkingZoneId")
@@ -265,6 +393,8 @@ namespace Safespot.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("CarPlateNumber");
 
                     b.Navigation("ParkingZone");
 

@@ -5,6 +5,8 @@ namespace Safespot.Service.DTO.UserDto
 {
     public class UserForCreationDto
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Name is required")]
         public string FirstName { get; set; }
 

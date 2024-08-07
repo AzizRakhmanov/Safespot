@@ -12,6 +12,10 @@ namespace Safespot.Service.DTO.ReservationDto
 
         public decimal PaidAmount { get; set; }
 
+        public Guid CarPlateNumberId { get; set; }
+
+        public CarPlateNumber CarPlateNumber { get; set; }
+
         public Guid UserId { get; set; }
 
         public User User { get; set; }
@@ -22,6 +26,6 @@ namespace Safespot.Service.DTO.ReservationDto
 
         public Guid ParkingZoneId { get; set; }
 
-        public ParkingZone ParkingZone { get; set; }
+        public Safespot.Models.Entities.ParkingZone ParkingZone { get; set; }
     }
 }

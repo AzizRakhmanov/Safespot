@@ -4,6 +4,7 @@ namespace Safespot.Service.DTO.SlotDto
 {
     public class SlotForResultDto
     {
+        public Guid Id { get; set; }
         public string Nama { get; set; }
 
         /// <summary>

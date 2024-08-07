@@ -3,7 +3,6 @@ using Safespot.Data.IRepositories;
 using Safespot.Models.Entities;
 using Safespot.Service.DTO.SlotDto;
 using Safespot.Service.Exceptions;
-using Safespot.Service.Extentions;
 using Safespot.Service.Services.AdminService.Interfaces;
 
 namespace Safespot.Service.Services.AdminService.Services
@@ -20,19 +19,11 @@ namespace Safespot.Service.Services.AdminService.Services
             this.repository = repository;
             this.mapper = mapper;
         }
-        public async ValueTask<bool> DeleteAsync(Guid id)
-        {
-            var existSlot = await this.repository.SelectAsync(p => p.Id == id);
-            if (existSlot == null)
-                throw new SafespotException("Slot not found", 404);
 
-            return await this.repository.DeleteAsync(existSlot);
-        }
-
-        public async Task<IList<SlotForResultDto>> RetrieveAllAsync(SlotCategory category, PaginationParams @params)
+        public async Task<IList<SlotForResultDto>> RetrieveAllAsync(SlotCategory category)
         {
-            var all = (await this.repository.SelectAllAsync(p => p.Category == category))
-                .ToPagedList(@params);
+            var all = (await this.repository.SelectAllAsync(p => p.Category == category));
+
 
             return this.mapper.Map<IList<SlotForResultDto>>(all);
         }
