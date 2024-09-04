@@ -7,14 +7,15 @@ namespace Safespot.Service.Services.UserService
 {
     public interface IUserService
     {
-        public ValueTask<UserForResultDto> EditProfileAsync(UserForCreationDto dto);
+        public Task<IEnumerable<UserForResultDto>> AllUsersAsync();
 
-        public ValueTask<ReservationForResultDto> EditReservationAsync(ReservationForCreationDto dto);
+        public ValueTask<UserForResultDto> RetrieveAsync(Guid id);
 
-        public ValueTask DeleteProfileAsync(Guid userId);
+        public ValueTask<UserForResultDto> AddAsync(UserForCreationDto dto);
 
-        public IList<SlotForResultDto> RetrieveFreeSlotsWithTime(Guid parkingZoneId, SlotCategory category, DateTime period);
+        public Task<UserForResultDto> EditAsync(UserForCreationDto dto);
 
-        public ValueTask<ReservationForResultDto> AddReservationAsync(ReservationForCreationDto dto);
+        public Task<bool> DeleteAsync(Guid Id);
+
     }
 }

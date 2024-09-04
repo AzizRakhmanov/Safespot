@@ -12,9 +12,9 @@ namespace Safespot.Service.Services.AdminService.Interfaces
 
         public ValueTask<ParkingZoneForResultDto> RetrieveAsync(Guid id);
 
-        public ValueTask<ParkingZoneForResultDto> UpdateAsync(Guid id, ParkingZoneForCreationDto user);
+        public ValueTask<ParkingZoneForResultDto> UpdateAsync(ParkingZoneForCreationDto user);
 
-        public ValueTask<bool> RemoveAsync(Guid id);
+        public Task<bool> RemoveAsync(Guid id);
 
         public Task<ParkingZoneForDetailsDto> RetrieveParkingZoneDetails(Guid parkingZoneId);
     }

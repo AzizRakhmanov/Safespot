@@ -13,6 +13,13 @@ namespace Safespot.Service.DTO.UserDto
         [Required(ErrorMessage = "Surname is required")]
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Middle Name required")]
+        public string MiddleName { get; set; }
+
+        [Required(ErrorMessage = "Birth Date required")]
+        [DataType(DataType.Date)]
+        public DateTime BirthDate { get; set; }
+
         [EmailAddress(ErrorMessage = "Email is not in the correct format")]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }

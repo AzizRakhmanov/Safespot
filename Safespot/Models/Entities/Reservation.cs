@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Safespot.Models.Commons;
+﻿using Safespot.Models.Commons;
 
 namespace Safespot.Models.Entities
 {

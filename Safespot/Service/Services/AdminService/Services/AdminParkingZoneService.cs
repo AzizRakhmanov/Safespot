@@ -10,14 +10,18 @@ namespace Safespot.Service.Services.AdminService.Services
 {
     public class AdminParkingZoneService : IAdminParkingZoneService
     {
-        private readonly IRepository<ParkingZone> repository;
+        private readonly IRepository<ParkingZone> parkingZoneRepository;
+        private readonly IRepository<Address> addressRepository;
         private readonly IMapper mapper;
 
-        public AdminParkingZoneService(IRepository<ParkingZone> repository,
-            IMapper profile
-            )
+        public AdminParkingZoneService
+            (
+            IRepository<ParkingZone> repository,
+            IRepository<Address> addressRepository,
+            IMapper profile)
         {
-            this.repository = repository;
+            this.parkingZoneRepository = repository;
+            this.addressRepository = addressRepository;
             this.mapper = profile;
         }
 
@@ -30,42 +34,51 @@ namespace Safespot.Service.Services.AdminService.Services
         {
             if (dto is null)
                 throw new SafespotException("Parking zone not initiated", 404);
+
+            dto.AddressId = new Guid("FC7EB6CD-3F23-4D26-B764-97D06FDF7959");
+
             var mappedUser = this.mapper.Map<ParkingZone>(dto);
-            Guid id = new Guid("FC7EB6CD-3F23-4D26-B764-97D06FDF7959");
-            mappedUser.AddressId = id;
-            mappedUser.Address = new Address()
-            {
-                Id = id,
-                City = "Tashkent",
-                District = "Yunusabod",
-                Country = "Uzbekistan",
-                GoogleMapUrl = "Url"
-            };
 
+            //Guid id = new Guid("FC7EB6CD-3F23-4D26-B764-97D06FDF7959");
+            //mappedUser.AddressId = id;
+            //mappedUser.Address = new Address()
+            //{
+            //    Id = id,
+            //    City = "Tashkent",
+            //    District = "Yunusabod",
+            //    Country = "Uzbekistan",
+            //    GoogleMapUrl = "Url"
+            //};
 
+            await this.parkingZoneRepository.InsertAsync(mappedUser);
+            await this.addressRepository.SaveAsync();
 
-            var result = await this.repository.InsertAsync(mappedUser);
-
-            var resultDto = this.mapper.Map<ParkingZoneForResultDto>(result);
+            var resultDto = this.mapper.Map<ParkingZoneForResultDto>(dto);
 
             return resultDto;
         }
 
+
+
         /// <summary>
-        /// admins removes the parking in database
+        /// admins removes the parking zone in database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="SafespotException"></exception>
-        public async ValueTask<bool> RemoveAsync(Guid id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            var @object = await this.repository.SelectAsync(p => p.Id == id);
+            var @object = await this.parkingZoneRepository.SelectAsync(p => p.Id == id);
             if (@object is null)
                 throw new SafespotException("Parking zone not found", 404);
 
-            var result = await this.repository.DeleteAsync(@object);
+            var result = await this.parkingZoneRepository.DeleteAsync(@object);
+
             return result;
         }
+
+
+
 
         /// <summary>
         /// retrieve all the parking zones from database using pagination
@@ -74,11 +87,14 @@ namespace Safespot.Service.Services.AdminService.Services
         /// <returns></returns>
         public async Task<IList<ParkingZoneForResultDto>> RetrieveAllAsync()
         {
-            var result = (await this.repository.SelectAllAsync(p => p != null));
+            string[] includes = { "Address" };
+            var result = await this.parkingZoneRepository.SelectAllAsync(p => p != null, includes);
 
 
             return this.mapper.Map<IList<ParkingZoneForResultDto>>(result);
         }
+
+
 
         /// <summary>
         /// admin retrieves parking zone by id
@@ -88,12 +104,16 @@ namespace Safespot.Service.Services.AdminService.Services
         /// <exception cref="SafespotException"></exception>
         public async ValueTask<ParkingZoneForResultDto> RetrieveAsync(Guid id)
         {
-            var result = await this.repository.SelectAsync(p => p.Id == id);
+            string[] includes = { "Address" };
+            var result = await this.parkingZoneRepository.SelectAsync(p => p.Id == id, includes);
+
             if (result is null)
                 throw new SafespotException("User not found", 404);
 
             return this.mapper.Map<ParkingZoneForResultDto>(result);
         }
+
+
 
         /// <summary>
         /// admins updates the parking zone by id and new date(ParkingZoneForCreationDto)
@@ -102,23 +122,31 @@ namespace Safespot.Service.Services.AdminService.Services
         /// <param name="dto"></param>
         /// <returns></returns>
         /// <exception cref="SafespotException"></exception>
-        public async ValueTask<ParkingZoneForResultDto> UpdateAsync(Guid id, ParkingZoneForCreationDto dto)
+        public async ValueTask<ParkingZoneForResultDto> UpdateAsync(ParkingZoneForCreationDto dto)
         {
-            var @object = await this.repository.SelectAsync(p => p.Id == id);
+            var @object = await this.parkingZoneRepository.SelectAsync(p => p.Id == dto.Id);
             if (@object == null)
                 throw new SafespotException("User not found", 404);
 
             var mappedUser = this.mapper.Map<ParkingZone>(dto);
-            this.repository.Update(mappedUser);
+            this.parkingZoneRepository.Update(mappedUser);
 
             var resultDto = this.mapper.Map<ParkingZoneForResultDto>(@object);
 
             return resultDto;
         }
 
+
+
+        /// <summary>
+        /// returns the parking zone with detailed addressRepository information
+        /// </summary>
+        /// <param name="parkingZoneId"></param>
+        /// <returns></returns>
         public async Task<ParkingZoneForDetailsDto> RetrieveParkingZoneDetails(Guid parkingZoneId)
         {
-            var result = (await this.repository.SelectAsync(p => p.Id == parkingZoneId));
+            var includes = new string[] { "Address" };
+            var result = await this.parkingZoneRepository.SelectAsync(p => p.Id == parkingZoneId, includes);
 
             var dto = new ParkingZoneForDetailsDto()
             {

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using static Duende.IdentityServer.Models.IdentityResources;
+﻿using Safespot.Models.Entities;
 
 namespace Safespot.Service.DTO.ParkingZoneDto
 {
@@ -14,5 +13,9 @@ namespace Safespot.Service.DTO.ParkingZoneDto
         public int EconomSlot { get; set; }
 
         public int BusinessSlot { get; set; }
+
+        public Guid AddressId { get; set; }
+
+        public Address Addresses { get; set; }
     }
 }

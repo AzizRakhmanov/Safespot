@@ -1,6 +1,5 @@
 ﻿using Safespot.Service.Services.EmailService;
 using Test;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace QuartzSampleApp
 {

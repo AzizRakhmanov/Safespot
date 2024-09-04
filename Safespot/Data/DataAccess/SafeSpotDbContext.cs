@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Safespot.Models.Entities;
-using Safespot.Service.DTO.ParkingZoneDto;
-using Safespot.Service.DTO.ParkingZone;
+using Safespot.Service.DTO.UserDto;
 
 namespace Safespot.Data.DataAccess
 {
@@ -26,7 +25,6 @@ namespace Safespot.Data.DataAccess
         public DbSet<CarPlateNumber> CarPlateNumbers { get; set; }
 
         #region
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //builder.Entity<Reservation>()
@@ -34,6 +32,11 @@ namespace Safespot.Data.DataAccess
             //    .WithMany()
             //    .HasForeignKey(p => p.ParkingZone)
             //    .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ParkingZone>()
+                .HasOne(p => p.Address)
+                .WithMany()
+                .HasForeignKey(p => p.AddressId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Reservation>()
                 .HasOne(p => p.User)
@@ -79,9 +82,7 @@ namespace Safespot.Data.DataAccess
                 .Property(p => p.PaidAmount)
                 .HasPrecision(18, 2);
         }
-        public DbSet<Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForCreationDto> ParkingZoneForCreationDto { get; set; }
-        public DbSet<Safespot.Service.DTO.ParkingZoneDto.ParkingZoneForResultDto> ParkingZoneForResultDto { get; set; }
-        public DbSet<Safespot.Service.DTO.ParkingZone.ParkingZoneForDetailsDto> ParkingZoneForDetailsDto { get; set; }
+        public DbSet<Safespot.Service.DTO.UserDto.UserForCreationDto> UserForCreationDto { get; set; }
         #endregion
     }
 }

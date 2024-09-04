@@ -6,6 +6,7 @@ namespace Safespot.Data.IRepositories
     public interface IRepository<TEntity> where TEntity : Auditable
     {
         public ValueTask<TEntity> InsertAsync(TEntity entity);
+        public ValueTask<bool> InsertAsync(IEnumerable<TEntity> entity);
 
         public ValueTask<bool> DeleteAsync(TEntity entity);
 
@@ -13,9 +14,10 @@ namespace Safespot.Data.IRepositories
 
         public TEntity Update(TEntity entity);
 
-        public ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression);
+        public ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null);
 
-        public Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression);
-        public Task<TEntity> SelectEagerAsync(Expression<Func<TEntity, bool>> expression, string[] includeProperties = null);
+        public Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null);
+
+        public Task SaveAsync();
     }
 }

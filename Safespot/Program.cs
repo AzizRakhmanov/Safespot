@@ -9,6 +9,7 @@ using Safespot.Service.Extentions;
 using Safespot.Service.Mapper;
 using Safespot.Service.Services.AdminService.Interfaces;
 using Safespot.Service.Services.AdminService.Services;
+using Safespot.Service.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,16 @@ builder.Services.AddScoped<IRepository<ParkingZone>, Repository<ParkingZone>>();
 builder.Services.AddScoped<IRepository<Slot>, Repository<Slot>>();
 builder.Services.AddScoped<IRepository<Reservation>, Repository<Reservation>>();
 builder.Services.AddScoped<IAdminSlotService, AdminSlotService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+// builder.Services.AddScoped<typeof(IRepository<>),typeof(Repository<>)>();
+// builder.Services.AddScoped<IRepository<Reservation>, Repository<Reservation>>();
+// builder.Services.ConfigureServices();
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddTransient<IAdminParkingZoneService, AdminParkingZoneService>();
+builder.Services.AddScoped<IAdminParkingZoneService, AdminParkingZoneService>();
 
 
 builder.Services.AddDefaultIdentity<UserForLoginDto>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<SafespotContext>();
@@ -41,14 +52,6 @@ builder.Services.AddRazorPages();
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<SafeSpotDbContext>();
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IRepository<User>, Repository<User>>();
-builder.Services.AddScoped<IRepository<Reservation>, Repository<Reservation>>();
-builder.Services.ConfigureServices();
-builder.Services.AddAutoMapper(typeof(MapperProfile));
-builder.Services.AddTransient<IAdminParkingZoneService, AdminParkingZoneService>();
-builder.Services.AddScoped<IAdminParkingZoneService, AdminParkingZoneService>();
 
 var app = builder.Build();
 

@@ -4,7 +4,7 @@
     {
         public Book GetBook()
         {
-           return new Book()
+            return new Book()
             {
                 Title = "C# in depth",
                 Author = new Author()

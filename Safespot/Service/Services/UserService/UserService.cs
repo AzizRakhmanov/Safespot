@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Safespot.Data.IRepositories;
 using Safespot.Models.Entities;
-using Safespot.Service.DTO.ReservationDto;
-using Safespot.Service.DTO.SlotDto;
 using Safespot.Service.DTO.UserDto;
 using Safespot.Service.Exceptions;
 
@@ -10,51 +8,66 @@ namespace Safespot.Service.Services.UserService
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<Reservation> _repository;
-        private readonly IMapper _mapper;
+        private readonly IRepository<User> _repository;
 
-        public UserService(
-            IRepository<Reservation> repository,
+        private readonly IMapper mapper;
+
+        public UserService(IRepository<User> repository,
             IMapper mapper)
         {
             this._repository = repository;
-            this._mapper = mapper;
+            this.mapper = mapper;
         }
-        public async ValueTask<ReservationForResultDto> AddReservationAsync(ReservationForCreationDto dto)
+        public async ValueTask<UserForResultDto> AddAsync(UserForCreationDto dto)
         {
             if (dto is null)
-                throw new SafespotException("Reservation has incomplete fields", 404);
+                throw new SafespotException("Missing fields exists", 404);
 
-            var dbReservation = this._mapper.Map<Reservation>(dto);
+            var userDb = this.mapper.Map<User>(dto);
+            var result = await this._repository.InsertAsync(userDb);
+            await this._repository.SaveAsync();
 
-            var result = await this._repository.InsertAsync(dbReservation);
-
-            return this._mapper.Map<ReservationForResultDto>(result);
+            return this.mapper.Map<UserForResultDto>(result);
         }
 
-        public async ValueTask DeleteProfileAsync(Guid userId)
+        public async Task<IEnumerable<UserForResultDto>> AllUsersAsync()
         {
-            var result = await this._repository.SelectAsync(p => p.Id == userId);
+            var allUsers = await this._repository.SelectAllAsync(p => p != null);
 
-            if (result == null)
-                throw new SafespotException("User not found",404);
-
-             await this._repository.DeleteAsync(result);
+            return this.mapper.Map<IEnumerable<UserForResultDto>>(allUsers);
         }
 
-        public ValueTask<UserForResultDto> EditProfileAsync(UserForCreationDto dto)
+        public async Task<bool> DeleteAsync(Guid Id)
         {
-            throw new NotImplementedException();
+            var dbEntity = await this._repository.SelectAsync(p => p.Id == Id);
+            var result = await this._repository.DeleteAsync(dbEntity);
+            await this._repository.SaveAsync();
+
+            return result;
         }
 
-        public ValueTask<ReservationForResultDto> EditReservationAsync(ReservationForCreationDto dto)
+        public async Task<UserForResultDto> EditAsync(UserForCreationDto dto)
         {
-            throw new NotImplementedException();
+            var dbEntity = await this._repository.SelectAsync(p => p.Id == dto.Id);
+
+            if (dbEntity is null)
+                throw new SafespotException("Attempt to change the user that doesn't exist", 404);
+
+            var userDb = this.mapper.Map<User>(dto);
+
+            var result = this._repository.Update(userDb);
+            await this._repository.SaveAsync();
+
+            return this.mapper.Map<UserForResultDto>(result);
         }
 
-        public IList<SlotForResultDto> RetrieveFreeSlotsWithTime(Guid parkingZoneId, SlotCategory category, DateTime period)
+        public async ValueTask<UserForResultDto> RetrieveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var dbUser = await this._repository.SelectAsync(p => p.Id == id);
+
+            if (dbUser == null) throw new SafespotException("User does not exist", 404);
+
+            return this.mapper.Map<UserForResultDto>(dbUser);
         }
     }
 }

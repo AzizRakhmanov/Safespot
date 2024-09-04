@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Safespot.Data.DataAccess;
 using Safespot.Data.IRepositories;
 using Safespot.Models.Commons;
-using System;
 using System.Linq.Expressions;
 
 namespace Safespot.Data.Repositories
@@ -19,9 +18,8 @@ namespace Safespot.Data.Repositories
         }
         public async ValueTask<bool> DeleteAsync(TEntity entity)
         {
-            //this._dbset.Entry(entity).State = EntityState.Deleted;
-            this._context.Remove(entity);
-            await this._context.SaveChangesAsync();
+            this._dbset.Entry(entity).State = EntityState.Deleted;
+            this._context.SaveChanges();
 
             return true;
         }
@@ -37,17 +35,35 @@ namespace Safespot.Data.Repositories
 
         public async ValueTask<TEntity> InsertAsync(TEntity entity)
         {
-            this._dbset.Entry(entity).State = EntityState.Added;
-            await this._context.SaveChangesAsync();
+            EntityEntry<TEntity> entry = await this._dbset.AddAsync(entity);
 
-            return entity;
+            return entry.Entity;
         }
 
-        public async Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression)
+        public async ValueTask<bool> InsertAsync(IEnumerable<TEntity> entity)
         {
-            var result = this._dbset.Where(expression);
+            await this._dbset.AddRangeAsync(entity);
 
-            return await result.ToListAsync();
+            return true;
+        }
+
+        public async Task<IList<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null)
+        {
+            if (includes is not null)
+            {
+                IQueryable<TEntity> query = this._dbset;
+                foreach (var includeProperty in includes)
+                {
+                    query = query.Include(includeProperty);
+                }
+
+                var result = await query.Where(expression).ToListAsync();
+                return result;
+            }
+            else
+            {
+               return await this._dbset.Where(expression).ToListAsync();
+            }
         }
 
         /// <summary>
@@ -55,31 +71,44 @@ namespace Safespot.Data.Repositories
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression)
+        public async ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null)
         {
-            var result = await this._dbset.FirstOrDefaultAsync(expression);
-
-            return result;
-        }
-
-        public async Task<TEntity> SelectEagerAsync(Expression<Func<TEntity, bool>> expression, string[] includeProperties = null)
-        {
-            IQueryable<TEntity> query = this._dbset;
-
-            foreach (var includeProperty in includeProperties)
+            if (includes is not null)
             {
-                query = query.Include(includeProperty);
-            }
+                IQueryable<TEntity> query = this._dbset;
 
-            return await query.FirstOrDefaultAsync(expression);
+                foreach (var includeProperty in includes)
+                {
+                    query = query.Include(includeProperty);
+                }
+                var result = await query.AsNoTracking().FirstOrDefaultAsync(expression);
+
+                return result;
+            }
+            else
+            {
+                var result = await this._dbset.AsNoTracking().FirstOrDefaultAsync(expression);
+                return result;
+            }
         }
 
+        /// <summary>
+        /// updates the entity from database
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public TEntity Update(TEntity entity)
         {
-            this._dbset.Entry(entity).State = EntityState.Modified;
-            var result = this._context.SaveChanges();
+            EntityEntry<TEntity> entryentity = this._context.Update(entity);
 
-            return entity;
+            return entryentity.Entity;
         }
+
+        public async Task SaveAsync()
+        {
+            await this._context.SaveChangesAsync();
+        }
+
+
     }
 }

@@ -17,14 +17,16 @@ namespace Safespot.Service.DTO.ParkingZone
         [DisplayName("Business Slot")]
         public int BusinessSlot { get; set; }
 
-        public string Country { get; set; } 
+        public Guid AddressId { get; set; }
+
+        public string Country { get; set; }
 
         public string Region { get; set; }
 
         public string District { get; set; }
 
-        public string City { get; set; }    
+        public string City { get; set; }
 
-        public string GoogleMapUrl {  get; set; }
+        public string GoogleMapUrl { get; set; }
     }
 }

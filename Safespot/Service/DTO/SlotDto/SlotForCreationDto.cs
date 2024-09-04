@@ -6,6 +6,8 @@ namespace Safespot.Service.DTO.SlotDto
 {
     public class SlotForCreationDto
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Name is required")]
         public string Nama { get; set; }
 
