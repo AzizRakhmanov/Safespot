@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Safespot", "Safespot\Safespot.csproj", "{CDDA8C46-49D4-4AD9-A90A-9A158E75ACC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safespot", "Safespot\Safespot.csproj", "{CDDA8C46-49D4-4AD9-A90A-9A158E75ACC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{026529F5-C872-420A-8AEE-A4851AA5653F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CDDA8C46-49D4-4AD9-A90A-9A158E75ACC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDA8C46-49D4-4AD9-A90A-9A158E75ACC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDA8C46-49D4-4AD9-A90A-9A158E75ACC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026529F5-C872-420A-8AEE-A4851AA5653F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026529F5-C872-420A-8AEE-A4851AA5653F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026529F5-C872-420A-8AEE-A4851AA5653F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026529F5-C872-420A-8AEE-A4851AA5653F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

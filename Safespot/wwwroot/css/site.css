@@ -18,5 +18,17 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+.container {
+    background-image: url("C:\Users\zzrxm\OneDrive\Desktop\parking.jpg");
+}
+
+.submit-form-container{
+    display: flex;
+    align-content:center;
+}
+.navbar-nav{
+    display: flex;
+    justify-content: space-around;
 }
